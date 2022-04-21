@@ -22,6 +22,72 @@ public class TestModel extends TestUtils {
      */
 
     @Test
+    public void testIntervalTiltsMerging1() {
+        int[][] before = new int[][]{
+                {4, 0, 0, 0},
+                {32, 0, 0, 0},
+                {4, 0, 0, 0},
+                {2, 0, 0, 0},
+        };
+        int[][] after = new int[][]{
+                {4, 0, 0, 0},
+                {32, 0, 0, 0},
+                {4, 0, 0, 0},
+                {2, 0, 0, 0},
+        };
+
+        updateModel(before, 0, 0, false);
+        String prevBoard = model.toString();
+        boolean changed = model.tilt(Side.NORTH);
+        checkChanged(Side.NORTH, false, changed);
+        checkModel(after, 0, 0, prevBoard, Side.NORTH);
+    }
+
+    @Test
+    public void testIntervalTiltsMerging2() {
+        int[][] before = new int[][]{
+                {4, 2, 4, 2},
+                {0, 0, 0, 0},
+                {4, 0, 0, 0},
+                {2, 0, 0, 0},
+        };
+        int[][] after = new int[][]{
+                {4, 2, 4, 2},
+                {0, 0, 0, 0},
+                {0, 0, 0, 4},
+                {0, 0, 0, 2},
+        };
+
+        updateModel(before, 0, 0, false);
+        String prevBoard = model.toString();
+        boolean changed = model.tilt(Side.EAST);
+        checkChanged(Side.NORTH, true, changed);
+        checkModel(after, 0, 0, prevBoard, Side.EAST);
+    }
+
+    @Test
+    public void testIntervalTiltsMerging3() {
+        int[][] before = new int[][]{
+                {4, 2, 4, 2},
+                {2, 0, 0, 0},
+                {4, 0, 0, 0},
+                {2, 0, 0, 0},
+        };
+        int[][] after = new int[][]{
+                {4, 0, 0, 0},
+                {2, 0, 0, 0},
+                {4, 0, 0, 0},
+                {2, 2, 4, 2},
+        };
+
+        updateModel(before, 0, 0, false);
+        String prevBoard = model.toString();
+        boolean changed = model.tilt(Side.SOUTH);
+        checkChanged(Side.NORTH, true, changed);
+        checkModel(after, 0, 0, prevBoard, Side.SOUTH);
+    }
+
+    @Test
     /** Checks right two pieces merge when 3 adjacent pieces have same value. */
     public void testTripleMerge1() {
         int[][] before = new int[][]{
